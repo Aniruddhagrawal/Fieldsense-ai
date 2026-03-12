@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="config.js"> </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FieldSense AI — FM Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060a10;
+  --s1: #0c1420;
+  --s2: #111e30;
+  --s3: #182640;
+  --s4: #1e2f4a;
+  --border: #1f3050;
+  --border2: #2a4060;
+  --amber: #f5a623;
+  --amber2: #ffcc66;
+  --teal: #00e5cc;
+  --teal2: #00ffee;
+  --red: #ff3c5a;
+  --green: #00e87a;
+  --blue: #4da6ff;
+  --text: #dde8f8;
+  --t2: #7a9cc0;
+  --t3: #3a5878;
+  --r: 14px;
+  --rs: 8px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;overflow:hidden;}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse 70% 60% at 10% 0%, rgba(245,166,35,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 90% 100%, rgba(0,229,204,0.05) 0%, transparent 55%),
+    repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(31,48,80,0.15) 40px, rgba(31,48,80,0.15) 41px),
+    repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(31,48,80,0.15) 40px, rgba(31,48,80,0.15) 41px);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ─── HEADER ─── */
+.hdr {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 20px;
+  background:rgba(12,20,32,0.97);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  position:relative; z-index:20;
+  flex-shrink:0;
+}
+.brand { display:flex; align-items:center; gap:12px; }
+.brand-icon {
+  width:42px; height:42px;
+  background:linear-gradient(135deg,#f5a623,#ff6b35);
+  border-radius:10px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px;
+  box-shadow:0 0 24px rgba(245,166,35,0.35);
+  position:relative;
+}
+.brand-icon::after {
+  content:'';
+  position:absolute; inset:-1px;
+  border-radius:11px;
+  background:linear-gradient(135deg,rgba(245,166,35,0.6),transparent);
+  z-index:-1;
+}
+.brand-name {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:26px;
+  letter-spacing:2px;
+  line-height:1;
+  background:linear-gradient(90deg,var(--amber),var(--teal));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.brand-tag {
+  font-size:9px;
+  color:var(--t3);
+  font-family:'JetBrains Mono',monospace;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  margin-top:1px;
+}
+.hdr-center {
+  display:flex; align-items:center; gap:6px;
+  background:var(--s2);
+  border:1px solid var(--border);
+  border-radius:30px;
+  padding:4px 6px;
+}
+.lang-pill {
+  padding:4px 11px;
+  border-radius:20px;
+  border:none;
+  background:transparent;
+  color:var(--t2);
+  font-size:10px;
+  font-family:'JetBrains Mono',monospace;
+  cursor:pointer;
+  transition:all 0.2s;
+  font-weight:500;
+}
+.lang-pill.on { background:linear-gradient(135deg,var(--amber),#ff6b35); color:#000; font-weight:700; }
+.hdr-right { display:flex; align-items:center; gap:10px; }
+.online-badge {
+  display:flex; align-items:center; gap:6px;
+  font-size:10px; color:var(--green);
+  font-family:'JetBrains Mono',monospace;
+  background:rgba(0,232,122,0.08);
+  border:1px solid rgba(0,232,122,0.2);
+  border-radius:20px;
+  padding:4px 10px;
+}
+.pulse-dot {
+  width:6px; height:6px;
+  background:var(--green);
+  border-radius:50%;
+  box-shadow:0 0 8px var(--green);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.7);}}
+
+/* ─── LAYOUT ─── */
+.layout {
+  display:flex;
+  flex:1;
+  overflow:hidden;
+  position:relative; z-index:1;
+}
+
+/* ─── LEFT PANEL ─── */
+.lpanel {
+  width:240px;
+  background:rgba(12,20,32,0.9);
+  border-right:1px solid var(--border);
+  display:flex; flex-direction:column;
+  overflow-y:auto;
+  flex-shrink:0;
+}
+.lpanel::-webkit-scrollbar{width:3px;}
+.lpanel::-webkit-scrollbar-thumb{background:var(--border2);}
+
+.lsec {
+  padding:14px 14px 6px;
+  font-size:8px;
+  color:var(--t3);
+  font-family:'JetBrains Mono',monospace;
+  letter-spacing:2.5px;
+  text-transform:uppercase;
+}
+
+.nav-item {
+  display:flex; align-items:center; gap:10px;
+  margin:2px 8px;
+  padding:9px 10px;
+  border-radius:var(--rs);
+  cursor:pointer;
+  border:1px solid transparent;
+  transition:all 0.18s;
+  font-size:12.5px;
+  color:var(--t2);
+  position:relative;
+}
+.nav-item:hover { background:var(--s2); border-color:var(--border); color:var(--text); }
+.nav-item.on {
+  background:rgba(245,166,35,0.1);
+  border-color:rgba(245,166,35,0.25);
+  color:var(--amber);
+}
+.nav-icon { font-size:15px; width:18px; text-align:center; flex-shrink:0; }
+.nav-badge {
+  margin-left:auto;
+  font-size:9px;
+  padding:1px 6px;
+  border-radius:10px;
+  background:rgba(245,166,35,0.15);
+  color:var(--amber);
+  font-family:'JetBrains Mono',monospace;
+}
+
+.sev-panel { padding:10px 12px; display:flex; flex-direction:column; gap:5px; }
+.sev-row {
+  display:flex; align-items:center; gap:7px;
+  padding:6px 8px;
+  border-radius:6px;
+  font-size:10px;
+  font-family:'JetBrains Mono',monospace;
+  font-weight:500;
+}
+.sev-row.c1{background:rgba(255,60,90,0.1);color:#ff3c5a;border:1px solid rgba(255,60,90,0.2);}
+.sev-row.c2{background:rgba(245,166,35,0.1);color:var(--amber);border:1px solid rgba(245,166,35,0.2);}
+.sev-row.c3{background:rgba(77,166,255,0.08);color:var(--blue);border:1px solid rgba(77,166,255,0.15);}
+.sev-row.c4{background:rgba(0,232,122,0.08);color:var(--green);border:1px solid rgba(0,232,122,0.15);}
+.sev-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.c1 .sev-dot{background:#ff3c5a;box-shadow:0 0 6px #ff3c5a;}
+.c2 .sev-dot{background:var(--amber);}
+.c3 .sev-dot{background:var(--blue);}
+.c4 .sev-dot{background:var(--green);}
+
+.divider-h{height:1px;background:var(--border);margin:8px 12px;}
+
+/* brand quick btns */
+.brand-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:5px; padding:8px 10px;
+}
+.brand-chip {
+  padding:6px 4px;
+  border-radius:6px;
+  border:1px solid var(--border);
+  background:var(--s2);
+  text-align:center;
+  font-size:10px;
+  color:var(--t2);
+  cursor:pointer;
+  transition:all 0.15s;
+  font-family:'JetBrains Mono',monospace;
+}
+.brand-chip:hover{border-color:var(--amber);color:var(--amber);}
+
+/* ─── CHAT ─── */
+.chat { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+
+.msgs {
+  flex:1;
+  overflow-y:auto;
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  scroll-behavior:smooth;
+}
+.msgs::-webkit-scrollbar{width:4px;}
+.msgs::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+
+/* Welcome */
+.welcome {
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  flex:1; gap:18px; padding:30px; text-align:center;
+}
+.wicon {
+  width:90px;height:90px;
+  background:linear-gradient(135deg,rgba(245,166,35,0.15),rgba(0,229,204,0.08));
+  border:1px solid rgba(245,166,35,0.3);
+  border-radius:28px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:42px;
+  box-shadow:0 0 60px rgba(245,166,35,0.12);
+  animation:float 3.5s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+.wtitle {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:36px;
+  letter-spacing:3px;
+  background:linear-gradient(135deg,var(--amber),var(--teal));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+}
+.wsub { color:var(--t2); font-size:14px; max-width:440px; line-height:1.7; }
+.wcaps {
+  display:grid; grid-template-columns:repeat(2,1fr);
+  gap:10px; width:100%; max-width:520px; margin-top:8px;
+}
+.wcap {
+  background:var(--s2);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px 14px;
+  text-align:left;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+.wcap:hover{border-color:var(--amber);background:rgba(245,166,35,0.05);transform:translateY(-2px);}
+.wcap-ic{font-size:24px;margin-bottom:6px;}
+.wcap-t{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.wcap-d{font-size:11px;color:var(--t2);line-height:1.5;}
+
+/* Messages */
+.msg{display:flex;gap:10px;max-width:88%;animation:min 0.28s ease;}
+@keyframes min{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.msg.u{align-self:flex-end;flex-direction:row-reverse;}
+.msg.a{align-self:flex-start;}
+.ava{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;flex-shrink:0;
+}
+.msg.a .ava{background:linear-gradient(135deg,var(--amber),#ff6b35);box-shadow:0 0 18px rgba(245,166,35,0.25);}
+.msg.u .ava{background:var(--s3);border:1px solid var(--border2);}
+.mc{display:flex;flex-direction:column;gap:5px;}
+.bbl{padding:11px 15px;border-radius:14px;font-size:13.5px;line-height:1.65;}
+.msg.a .bbl{background:var(--s2);border:1px solid var(--border2);border-top-left-radius:3px;}
+.msg.u .bbl{background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.22);border-top-right-radius:3px;}
+.mtime{font-size:9.5px;color:var(--t3);font-family:'JetBrains Mono',monospace;padding:0 3px;}
+.msg.u .mtime{text-align:right;}
+
+/* Rich cards */
+.card{
+  background:var(--s3);border-radius:12px;padding:14px;
+  margin-top:8px;border:1px solid var(--border2);
+}
+.card-hdr{
+  display:flex;align-items:center;gap:8px;
+  margin-bottom:12px;padding-bottom:10px;
+  border-bottom:1px solid var(--border);
+}
+.card-title{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;}
+.sev-tag{
+  padding:3px 10px;border-radius:20px;
+  font-size:9px;font-family:'JetBrains Mono',monospace;
+  letter-spacing:1.5px;text-transform:uppercase;margin-left:auto;
+}
+.st-crit{background:rgba(255,60,90,0.15);color:#ff3c5a;border:1px solid rgba(255,60,90,0.3);}
+.st-urg{background:rgba(245,166,35,0.12);color:var(--amber);border:1px solid rgba(245,166,35,0.25);}
+.st-rout{background:rgba(77,166,255,0.1);color:var(--blue);border:1px solid rgba(77,166,255,0.2);}
+.st-mon{background:rgba(0,232,122,0.08);color:var(--green);border:1px solid rgba(0,232,122,0.15);}
+
+.safety-bar{
+  background:rgba(255,60,90,0.08);border:1px solid rgba(255,60,90,0.25);
+  border-radius:8px;padding:8px 11px;font-size:12px;color:#ff8899;
+  display:flex;gap:8px;align-items:flex-start;margin-bottom:10px;
+}
+.causes{display:flex;flex-direction:column;gap:5px;margin:8px 0;}
+.cause{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 10px;background:rgba(0,0,0,0.25);border-radius:7px;font-size:12px;
+}
+.cpill{
+  margin-left:auto;font-family:'JetBrains Mono',monospace;
+  font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;
+}
+.ph{background:rgba(255,60,90,0.15);color:#ff3c5a;}
+.pm{background:rgba(245,166,35,0.12);color:var(--amber);}
+.pl{background:rgba(77,166,255,0.1);color:var(--blue);}
+
+.steps{display:flex;flex-direction:column;gap:6px;}
+.step{display:flex;gap:9px;font-size:12.5px;align-items:flex-start;padding:5px 0;}
+.stepn{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--amber),#ff6b35);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:700;color:#000;
+  font-family:'JetBrains Mono',monospace;
+}
+.se-box{
+  background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.15);
+  border-radius:10px;padding:12px;margin-top:10px;
+}
+.se-hdr{
+  display:flex;align-items:center;gap:6px;
+  font-size:11px;color:var(--amber);font-weight:700;
+  margin-bottom:8px;font-family:'JetBrains Mono',monospace;
+  letter-spacing:1px;
+}
+.se-item{font-size:12px;color:var(--t2);padding:4px 0;border-bottom:1px solid rgba(31,48,80,0.4);}
+.se-item:last-child{border:none;}
+.se-item b{color:var(--text);}
+
+.wo-box{
+  background:rgba(0,232,122,0.05);border:1px solid rgba(0,232,122,0.15);
+  border-radius:10px;padding:12px;margin-top:10px;
+}
+.wo-hdr{
+  display:flex;align-items:center;gap:6px;color:var(--green);
+  font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;
+  margin-bottom:8px;letter-spacing:1px;
+}
+.wo-r{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:4px 0;border-bottom:1px solid rgba(0,232,122,0.08);
+  font-size:11.5px;
+}
+.wo-r:last-child{border:none;}
+.wo-r span:first-child{color:var(--t2);}
+.wo-r span:last-child{color:var(--text);}
+
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:10px 0;}
+.stat-box{background:rgba(0,0,0,0.2);padding:9px;border-radius:8px;}
+.stat-l{font-size:9px;color:var(--t2);margin-bottom:3px;font-family:'JetBrains Mono',monospace;}
+.stat-v{font-size:14px;font-weight:700;}
+
+.report-mono{
+  background:rgba(0,0,0,0.35);border-radius:10px;padding:14px;
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;line-height:1.9;
+  border:1px solid var(--border2);max-height:290px;overflow-y:auto;
+  margin-top:8px;
+}
+.report-mono::-webkit-scrollbar{width:3px;}
+.report-mono::-webkit-scrollbar-thumb{background:var(--border2);}
+.rs{color:var(--amber);}
+.rl{color:var(--t2);}
+.rv{color:var(--text);}
+.rw{color:var(--amber2);}
+.ro{color:var(--green);}
+.rb{color:var(--red);}
+.rd{color:var(--border2);}
+
+/* debug */
+.debug-steps{display:flex;flex-direction:column;gap:6px;margin:10px 0;}
+.dbg{
+  display:flex;gap:8px;align-items:flex-start;
+  background:rgba(0,0,0,0.2);border-radius:8px;padding:9px 10px;
+  font-size:12px;
+}
+.dbg-ic{font-size:16px;flex-shrink:0;}
+.dbg-t{color:var(--text);}
+.dbg-sub{color:var(--t2);font-size:11px;margin-top:2px;}
+
+/* media preview */
+.mthumb{
+  width:72px;height:72px;border-radius:8px;
+  background:var(--s3);border:1px solid var(--border2);
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;font-size:22px;gap:2px;
+  cursor:pointer;transition:all 0.15s;overflow:hidden;
+}
+.mthumb:hover{border-color:var(--amber);}
+.mthumb img{width:100%;height:100%;object-fit:cover;border-radius:7px;}
+.mthumb-lbl{font-size:8px;color:var(--t3);font-family:'JetBrains Mono',monospace;}
+
+.voice-row{
+  display:flex;align-items:center;gap:10px;
+  background:var(--s3);border-radius:8px;padding:8px 12px;
+  border:1px solid var(--border2);margin-top:6px;font-size:11px;
+}
+.vbars{display:flex;gap:2px;align-items:center;height:18px;}
+.vbar{width:3px;background:var(--amber);border-radius:2px;animation:vb 0.9s ease infinite;}
+.vbar:nth-child(1){height:5px;animation-delay:0s;}
+.vbar:nth-child(2){height:12px;animation-delay:0.1s;}
+.vbar:nth-child(3){height:8px;animation-delay:0.2s;}
+.vbar:nth-child(4){height:16px;animation-delay:0.3s;}
+.vbar:nth-child(5){height:9px;animation-delay:0.4s;}
+.vbar:nth-child(6){height:13px;animation-delay:0.5s;}
+.vbar:nth-child(7){height:5px;animation-delay:0.6s;}
+@keyframes vb{0%,100%{opacity:0.35;transform:scaleY(0.5);}50%{opacity:1;transform:scaleY(1);}}
+
+/* thinking */
+.thinking{display:flex;gap:10px;align-items:flex-start;animation:min 0.25s ease;}
+.think-bbl{
+  background:var(--s2);border:1px solid var(--border2);
+  border-radius:14px;border-top-left-radius:3px;
+  padding:13px 16px;display:flex;align-items:center;gap:10px;
+  font-size:13px;color:var(--t2);
+}
+.think-phase{font-size:11px;color:var(--amber);font-family:'JetBrains Mono',monospace;}
+.tdots{display:flex;gap:4px;}
+.td{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:dot 1.2s infinite;}
+.td:nth-child(2){animation-delay:0.2s;}
+.td:nth-child(3){animation-delay:0.4s;}
+@keyframes dot{0%,80%,100%{opacity:0.25;transform:scale(0.7);}40%{opacity:1;transform:scale(1);}}
+
+/* ─── INPUT AREA ─── */
+.iarea{
+  padding:14px 20px 18px;
+  background:rgba(12,20,32,0.97);
+  border-top:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  flex-shrink:0;
+}
+.qrow{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.qbtn{
+  padding:5px 13px;border-radius:20px;
+  border:1px solid var(--border2);background:var(--s2);
+  color:var(--t2);font-size:11px;cursor:pointer;
+  transition:all 0.15s;font-family:'Outfit',sans-serif;
+}
+.qbtn:hover{border-color:var(--amber);color:var(--amber);}
+
+.pend{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.pitem{
+  display:flex;align-items:center;gap:6px;
+  background:var(--s3);border:1px solid var(--border2);
+  border-radius:6px;padding:4px 9px;
+  font-size:10.5px;color:var(--t2);
+  font-family:'JetBrains Mono',monospace;
+}
+.px{cursor:pointer;color:var(--t3);transition:color 0.15s;}
+.px:hover{color:var(--red);}
+
+.irow{display:flex;gap:10px;align-items:flex-end;}
+.tinput{
+  flex:1;background:var(--s2);border:1px solid var(--border2);
+  border-radius:12px;padding:12px 16px;
+  color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;
+  resize:none;outline:none;min-height:46px;max-height:120px;
+  line-height:1.55;transition:border-color 0.2s;
+}
+.tinput:focus{border-color:rgba(245,166,35,0.45);}
+.tinput::placeholder{color:var(--t3);}
+.sendbtn{
+  width:46px;height:46px;border-radius:12px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--amber),#ff6b35);
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:#000;font-weight:900;
+  transition:all 0.2s;
+  box-shadow:0 4px 18px rgba(245,166,35,0.35);
+}
+.sendbtn:hover{transform:scale(1.06);box-shadow:0 6px 24px rgba(245,166,35,0.5);}
+.sendbtn:active{transform:scale(0.96);}
+
+.tbar{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap;}
+.tbtn{
+  display:flex;align-items:center;gap:5px;
+  padding:6px 13px;border-radius:8px;
+  border:1px solid var(--border2);background:var(--s2);
+  color:var(--t2);font-size:11.5px;cursor:pointer;
+  transition:all 0.18s;font-family:'Outfit',sans-serif;
+}
+.tbtn:hover{border-color:var(--amber);color:var(--amber);}
+.tbtn.rec{border-color:var(--red);background:rgba(255,60,90,0.08);color:var(--red);animation:rp 1s infinite;}
+@keyframes rp{0%,100%{box-shadow:0 0 0 0 rgba(255,60,90,0.3);}50%{box-shadow:0 0 0 7px rgba(255,60,90,0);}}
+.tbtn.speaking{border-color:var(--teal);background:rgba(0,229,204,0.08);color:var(--teal);}
+.file-in{display:none;}
+
+/* action btns in messages */
+.act-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px;}
+.act-btn{
+  padding:7px 14px;border-radius:8px;cursor:pointer;
+  font-size:11.5px;font-family:'Outfit',sans-serif;transition:all 0.15s;
+}
+.act-primary{background:rgba(245,166,35,0.1);border:1px solid rgba(245,166,35,0.3);color:var(--amber);}
+.act-primary:hover{background:rgba(245,166,35,0.18);}
+.act-sec{background:var(--s3);border:1px solid var(--border2);color:var(--t2);}
+.act-sec:hover{border-color:var(--amber);color:var(--amber);}
+
+/* modal */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:1000;align-items:center;justify-content:center;}
+.modal.open{display:flex;}
+.modal img{max-width:90vw;max-height:90vh;border-radius:12px;}
+.modal-x{position:absolute;top:18px;right:18px;color:#fff;font-size:26px;cursor:pointer;background:rgba(255,255,255,0.1);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+
+b{font-weight:600;color:var(--text);}
+.hi{color:var(--teal);}
+.hw{color:var(--amber2);}
+.hr{color:var(--red);}
+.hg{color:var(--green);}
+
+@media(max-width:720px){.lpanel{display:none;}.msg{max-width:96%;}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="brand">
+    <div class="brand-icon">⚙️</div>
+    <div>
+      <div class="brand-name">FieldSense</div>
+      <div class="brand-tag">AI · FM Intelligence · UAE</div>
+    </div>
+  </div>
+  <div class="hdr-center" id="langBar">
+    <button class="lang-pill on" onclick="setLang('EN',this)">EN</button>
+    <button class="lang-pill" onclick="setLang('AR',this)">AR</button>
+    <button class="lang-pill" onclick="setLang('HI',this)">हिं</button>
+    <button class="lang-pill" onclick="setLang('UR',this)">اُر</button>
+    <button class="lang-pill" onclick="setLang('TL',this)">TL</button>
+    <button class="lang-pill" onclick="setLang('ML',this)">മ</button>
+    <button class="lang-pill" onclick="setLang('TA',this)">த</button>
+    <button class="lang-pill" onclick="setLang('KN',this)">ಕ</button>
+    <button class="lang-pill" onclick="setLang('TE',this)">తె</button>
+    <button class="lang-pill" onclick="setLang('MR',this)">म</button>
+    <button class="lang-pill" onclick="setLang('BH',this)">भो</button>
+  </div>
+  <div class="hdr-right">
+    <div class="online-badge"><div class="pulse-dot"></div>AI ONLINE</div>
+  </div>
+</div>
+
+<div class="layout">
+  <div class="lpanel">
+    <div class="lsec">Modules</div>
+    <div class="nav-item on" onclick="activateNav(this,'chat')">
+      <span class="nav-icon">💬</span>AI Field Assistant
+    </div>
+    <div class="nav-item" onclick="activateNav(this,'screen')">
+      <span class="nav-icon">🖥️</span>Error Screen Reader
+    </div>
+    <div class="nav-item" onclick="activateNav(this,'report')">
+      <span class="nav-icon">📋</span>Condition Reports
+    </div>
+    <div class="nav-item" onclick="activateNav(this,'debug')">
+      <span class="nav-icon">🔍</span>Debug & Rectify
+    </div>
+    <div class="nav-item" onclick="activateNav(this,'voice')">
+      <span class="nav-icon">🎙️</span>Voice Diagnostics
+    </div>
+    <div class="nav-item" onclick="activateNav(this,'senior')">
+      <span class="nav-icon">👷</span>Sr. Engineer Mode
+      <span class="nav-badge">AI</span>
+    </div>
+    <div class="nav-item" onclick="activateNav(this,'ppm')">
+      <span class="nav-icon">📅</span>PPM Checklists
+    </div>
+
+    <div class="divider-h"></div>
+    <div class="lsec">Severity Guide</div>
+    <div class="sev-panel">
+      <div class="sev-row c1"><div class="sev-dot"></div>CRITICAL — Stop & Escalate</div>
+      <div class="sev-row c2"><div class="sev-dot"></div>URGENT — Fix in 4 hours</div>
+      <div class="sev-row c3"><div class="sev-dot"></div>ROUTINE — 48hr window</div>
+      <div class="sev-row c4"><div class="sev-dot"></div>MONITOR — Log & watch</div>
+    </div>
+
+    <div class="divider-h"></div>
+    <div class="lsec">Quick Brand Lookup</div>
+    <div class="brand-grid">
+      <div class="brand-chip" onclick="sq('Common fault codes for Carrier 30XA chiller UAE')">Carrier</div>
+      <div class="brand-chip" onclick="sq('Common fault codes for Trane chiller UAE')">Trane</div>
+      <div class="brand-chip" onclick="sq('Common fault codes for York chiller UAE')">York</div>
+      <div class="brand-chip" onclick="sq('Common fault codes for Daikin chiller UAE')">Daikin</div>
+      <div class="brand-chip" onclick="sq('Common fault codes for Gree HVAC UAE')">Gree</div>
+      <div class="brand-chip" onclick="sq('Common fault codes for McQuay chiller UAE')">McQuay</div>
+      <div class="brand-chip" onclick="sq('ABB VFD fault codes common')">ABB VFD</div>
+      <div class="brand-chip" onclick="sq('Deep Sea generator controller fault codes')">Deep Sea</div>
+    </div>
+
+    <div class="divider-h"></div>
+    <div class="lsec">Site Types</div>
+    <div class="nav-item" onclick="sq('HVAC checklist for commercial office building UAE summer')">
+      <span class="nav-icon">🏢</span>Commercial
+    </div>
+    <div class="nav-item" onclick="sq('Hospital HVAC and critical systems maintenance checklist UAE HAAD compliance')">
+      <span class="nav-icon">🏥</span>Hospital
+    </div>
+    <div class="nav-item" onclick="sq('Electrical substation maintenance checklist UAE DEWA')">
+      <span class="nav-icon">⚡</span>Substation
+    </div>
+    <div class="nav-item" onclick="sq('Residential building HVAC and facilities management checklist UAE')">
+      <span class="nav-icon">🏘️</span>Residential
+    </div>
+  </div>
+
+  <div class="chat">
+    <div class="msgs" id="msgs">
+      <div class="welcome" id="welcome">
+        <div class="wicon">⚙️</div>
+        <div class="wtitle">FieldSense AI</div>
+        <div class="wsub">Your senior engineer in your pocket. Upload photos, videos, voice notes — get instant diagnosis, step-by-step repair guides, and professional reports across all your UAE sites.</div>
+        <div class="wcaps">
+          <div class="wcap" onclick="demoScreen()">
+            <div class="wcap-ic">🖥️</div>
+            <div class="wcap-t">Error Screen Reader</div>
+            <div class="wcap-d">Photo of any display → instant fault diagnosis with causes ranked</div>
+          </div>
+          <div class="wcap" onclick="demoReport()">
+            <div class="wcap-ic">📋</div>
+            <div class="wcap-t">Condition Report</div>
+            <div class="wcap-d">Photos + model/serial → professional PDF report in seconds</div>
+          </div>
+          <div class="wcap" onclick="demoVoice()">
+            <div class="wcap-ic">🎙️</div>
+            <div class="wcap-t">Voice Diagnostics</div>
+            <div class="wcap-d">Speak in any language — Malayalam, Hindi, Arabic & more</div>
+          </div>
+          <div class="wcap" onclick="demoSenior()">
+            <div class="wcap-ic">👷</div>
+            <div class="wcap-t">Sr. Engineer Mode</div>
+            <div class="wcap-d">Deep-dive analysis, root cause, long-term recommendations</div>
+          </div>
+          <div class="wcap" onclick="demoDebug()">
+            <div class="wcap-ic">🔍</div>
+            <div class="wcap-t">Debug & Rectify</div>
+            <div class="wcap-d">Systematic fault isolation with measurement points & tools</div>
+          </div>
+          <div class="wcap" onclick="demoMulti()">
+            <div class="wcap-ic">⚡</div>
+            <div class="wcap-t">Multi-Fault Analysis</div>
+            <div class="wcap-d">Multiple alarms? AI finds single root cause behind all</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="iarea">
+      <div class="qrow">
+        <button class="qbtn" onclick="sq('Chiller high condenser pressure alarm, outdoor temp 45°C')">🌡️ Chiller HCP alarm</button>
+        <button class="qbtn" onclick="sq('AHU supply air temperature high, not cooling')">❄️ AHU not cooling</button>
+        <button class="qbtn" onclick="sq('VFD tripped showing overcurrent fault')">⚡ VFD overcurrent</button>
+        <button class="qbtn" onclick="sq('Cooling tower fan vibrating excessively')">🌀 CT fan vibration</button>
+        <button class="qbtn" onclick="demoScreen()">🖥️ Demo: Error Screen</button>
+        <button class="qbtn" onclick="demoReport()">📋 Demo: Report</button>
+      </div>
+      <div class="pend" id="pend"></div>
+      <div class="irow">
+        <textarea class="tinput" id="ti" placeholder="Describe fault, ask anything, or upload photo/video/voice…" rows="1" onkeydown="hk(event)" oninput="ar(this)"></textarea>
+        <input type="file" class="file-in" id="pi" accept="image/*,image/jpeg,image/png" multiple onchange="hf(event,'photo')">
+        <input type="file" class="file-in" id="vi" accept="video/*" onchange="hf(event,'video')">
+        <button class="sendbtn" onclick="send()">➤</button>
+      </div>
+      <div class="tbar">
+        <button class="tbtn" onclick="document.getElementById('pi').click()">📷 Photo / Screenshot</button>
+        <button class="tbtn" onclick="document.getElementById('vi').click()">🎬 Video</button>
+        <button class="tbtn" id="vbtn" onclick="toggleVoice()">🎙️ Voice Note</button>
+        <button class="tbtn" onclick="toggleSpeak()" id="spkbtn">🔊 Speak Answer</button>
+        <button class="tbtn" onclick="demoSenior()" style="margin-left:auto">👷 Sr. Engineer</button>
+        <button class="tbtn" onclick="demoDebug()">🔍 Debug Mode</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal" onclick="closeM()">
+  <div class="modal-x" onclick="closeM()">✕</div>
+  <img id="mimg" src="" alt="">
+</div>
+
+<script>
+// ─── STATE ───
+let lang = 'EN';
+let busy = false;
+let pending = [];
+let recording = false;
+let speakEnabled = false;
+let mediaRec = null;
+let recStart = 0;
+
+// ─── SYSTEM PROMPT ───
+const SYS = `You are FieldSense AI — a senior facility management engineer with 25+ years of HVAC, MEP, and building services experience in the UAE. You work across commercial buildings, hospitals, electrical substations, and residential towers.
+
+YOUR PERSONA: You think and respond exactly like a seasoned Senior Engineer — confident, structured, technically precise, safety-first. You don't just list possibilities — you RANK them by probability and explain WHY.
+
+CAPABILITIES:
+1. FAULT DIAGNOSIS: From text, photos, error codes, voice descriptions — identify the fault, classify severity, rank probable causes by likelihood (%), give step-by-step repair/rectification actions
+2. ERROR SCREEN READING: Read chiller/AHU/VFD/generator/UPS display photos — identify brand, decode error code, diagnose with causes ranked
+3. CONDITION REPORTS: From equipment photos + model/serial — generate professional structured reports with findings per photo, action plan prioritized, cost of inaction
+4. DEBUG & RECTIFY: Systematic fault isolation methodology — what to measure, where, with which tools, in what sequence
+5. RECTIFICATION TECHNIQUES: Specific repair procedures, not generic advice
+6. SENIOR ENGINEER SUGGESTIONS: Long-term asset health perspective, pattern recognition across faults, replacement vs. repair recommendation, energy impact assessment
+7. PPM GUIDANCE: Maintenance checklists specific to brand/model and UAE climate conditions
+8. SAFETY: ALWAYS check for safety hazards first. PTW reminders for HV work. Hospital infection control. Confined space. Working at height.
+
+LANGUAGES: Respond in the same language the user writes in. Support: English, Arabic (اردو), Hindi (हिंदी), Urdu (اُردو), Filipino/Tagalog, Malayalam (മലയാളം), Tamil (தமிழ்), Kannada (ಕನ್ನಡ), Telugu (తెలుగు), Marathi (मराठी), Bhojpuri (भोजपुरी). Detect language automatically from the message.
+
+UAE CONTEXT: 
+- DEWA/ADDC/SEWA tariffs, peak demand charges critical
+- Extreme summer heat 45-50°C, high humidity August-September
+- Common brands: Carrier, Trane, York, Daikin, Gree, McQuay, Climaveneta, Lennox
+- HAAD/DHA compliance for hospitals
+- Estidama/Green Building regulations
+- Most buildings on district cooling (Empower/Tabreed) or central chiller plant
+
+SEVERITY CLASSIFICATION (always include):
+🔴 CRITICAL — Stop work, escalate immediately (HV fault, gas leak, hospital life-safety)
+🟠 URGENT — Fix within 4 hours (chiller trip in summer, hospital AHU, occupied space)
+🔵 ROUTINE — Fix within 48 hours
+🟢 MONITOR — Log and watch trend
+
+FORMAT YOUR RESPONSES:
+- Always start with severity classification
+- Safety warning if any risk exists
+- For faults: Probable causes ranked by % likelihood
+- Step-by-step numbered actions
+- Senior engineer insight/tip at the end
+- Estimate repair time and parts needed
+- Be specific — mention actual measurement values, tool names, part numbers where possible
+- For reports: structured with Executive Summary, Photo findings, Action Plan, Cost of Inaction
+
+You speak to technicians as a mentor — clear, practical, never condescending, always actionable.`;
+
+// ─── HELPERS ───
+function now() {
+  return new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+}
+function hideWelcome() {
+  const w = document.getElementById('welcome');
+  if(w) w.remove();
+}
+function scrollDown() {
+  const m = document.getElementById('msgs');
+  m.scrollTop = m.scrollHeight;
+}
+function ar(el) {
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,120)+'px';
+}
+function hk(e) {
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}
+}
+
+// ─── LANGUAGE ───
+function setLang(l,btn) {
+  lang = l;
+  document.querySelectorAll('.lang-pill').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  const ph = {
+    EN:"Describe fault, ask anything, or upload photo/video/voice…",
+    AR:"صِف العطل أو اطرح سؤالاً أو ارفع صورة…",
+    HI:"खराबी बताएं या सवाल पूछें…",
+    UR:"خرابی بیان کریں یا سوال پوچھیں…",
+    TL:"Ilarawan ang fault o magtanong…",
+    ML:"തകരാർ വിവരിക്കുക അല്ലെങ്കിൽ ചോദ്യം ചോദിക്കുക…",
+    TA:"கோளாறை விவரிக்கவும் அல்லது கேள்வி கேட்கவும்…",
+    KN:"ದೋಷವನ್ನು ವಿವರಿಸಿ ಅಥವಾ ಪ್ರಶ್ನೆ ಕೇಳಿ…",
+    TE:"లోపాన్ని వివరించండి లేదా ప్రశ్న అడగండి…",
+    MR:"बिघाड सांगा किंवा प्रश्न विचारा…",
+    BH:"खराबी बताईं या सवाल पूछीं…"
+  };
+  document.getElementById('ti').placeholder = ph[l]||ph.EN;
+}
+
+// ─── NAV ───
+function activateNav(el, mode) {
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
+  el.classList.add('on');
+  const msgs = {
+    screen: "🖥️ **Error Screen Reader activated.**\n\nUpload a photo of any equipment display — chiller, AHU, VFD, generator, UPS, cooling tower panel, relay — I'll read the screen and diagnose the fault with ranked causes and action steps.",
+    report: "📋 **Condition Report Generator activated.**\n\nUpload multiple equipment photos + tell me the asset model and serial number. I'll generate a full professional condition assessment report with prioritized action plan and cost-of-inaction analysis.",
+    debug: "🔍 **Debug & Rectify Mode activated.**\n\nDescribe the symptom or upload a photo/video. I'll give you a systematic fault isolation methodology — exactly what to measure, where, with which tools, in what sequence — like a senior engineer walking you through it.",
+    voice: "🎙️ **Voice Diagnostics activated.**\n\nPress the **Voice Note** button and describe the fault in your language — Malayalam, Hindi, Arabic, Tamil, or any other supported language. I'll transcribe, translate if needed, and diagnose.",
+    senior: "👷 **Senior Engineer Mode activated.**\n\nAsk me anything — I'll respond with deep technical analysis, root cause thinking, long-term asset health perspective, pattern recognition, and replacement vs. repair recommendations. No short answers here.",
+    ppm: "📅 **PPM Guide activated.**\n\nTell me the equipment type, brand, and model. I'll generate a detailed Planned Preventive Maintenance checklist tailored for UAE climate conditions and your site type.",
+    chat: "💬 **AI Chat ready.**\n\nAsk me anything about HVAC, electrical, mechanical, plumbing, hospital engineering, substations, or any FM topic."
+  };
+  if(msgs[mode]) { hideWelcome(); addAI(msgs[mode]); }
+}
+
+// ─── MESSAGES ───
+function addUser(text, atts=[]) {
+  hideWelcome();
+  const m = document.getElementById('msgs');
+  const d = document.createElement('div');
+  d.className = 'msg u';
+  let mediaHtml = '';
+  if(atts.length) {
+    mediaHtml = '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;">';
+    atts.forEach(a => {
+      if(a.type==='photo') mediaHtml += `<div class="mthumb" onclick="openM('${a.src}')"><img src="${a.src}" alt=""><div class="mthumb-lbl">📷</div></div>`;
+      else if(a.type==='video') mediaHtml += `<div class="mthumb"><div style="font-size:26px">🎬</div><div class="mthumb-lbl">Video</div></div>`;
+      else if(a.type==='voice') mediaHtml += `<div class="voice-row"><div class="vbars">${'<div class="vbar"></div>'.repeat(7)}</div><span style="color:var(--t2);font-size:11px">🎙️ ${a.label||'Voice note'}</span></div>`;
+    });
+    mediaHtml += '</div>';
+  }
+  d.innerHTML = `<div class="ava">👤</div><div class="mc">${text?`<div class="bbl">${text}</div>`:''}${mediaHtml}<div class="mtime">${now()}</div></div>`;
+  m.appendChild(d); scrollDown();
+}
+
+function addAI(text) {
+  const m = document.getElementById('msgs');
+  const d = document.createElement('div');
+  d.className = 'msg a';
+  d.innerHTML = `<div class="ava">⚙️</div><div class="mc"><div class="bbl">${fmt(text)}</div><div class="mtime">${now()}</div></div>`;
+  m.appendChild(d); scrollDown();
+  if(speakEnabled && window.speechSynthesis) {
+    const clean = text.replace(/<[^>]+>/g,'').replace(/[🔴🟠🔵🟢⚠️✅📷🎙️👷🔍📋🖥️]/g,'');
+    const u = new SpeechSynthesisUtterance(clean.substring(0,400));
+    u.rate = 0.95; u.pitch = 1;
+    window.speechSynthesis.speak(u);
+  }
+}
+
+function addRich(html) {
+  const m = document.getElementById('msgs');
+  const d = document.createElement('div');
+  d.className = 'msg a';
+  d.innerHTML = `<div class="ava">⚙️</div><div class="mc"><div class="bbl">${html}</div><div class="mtime">${now()}</div></div>`;
+  m.appendChild(d); scrollDown();
+}
+
+function showThinking(phase='Analyzing') {
+  hideWelcome();
+  const m = document.getElementById('msgs');
+  const d = document.createElement('div');
+  d.className='thinking'; d.id='thk';
+  d.innerHTML=`<div class="ava" style="background:linear-gradient(135deg,var(--amber),#ff6b35);width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;box-shadow:0 0 18px rgba(245,166,35,0.25)">⚙️</div><div class="think-bbl"><span class="think-phase">${phase}</span><div class="tdots"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>`;
+  m.appendChild(d); scrollDown();
+}
+
+function hideThinking() {
+  const t=document.getElementById('thk'); if(t) t.remove();
+}
+
+function fmt(t) {
+  return t
+    .replace(/\*\*(.*?)\*\*/g,'<b>$1</b>')
+    .replace(/`(.*?)`/g,'<code style="background:rgba(0,0,0,0.3);padding:1px 5px;border-radius:4px;font-family:JetBrains Mono,monospace;font-size:11px">$1</code>')
+    .replace(/🔴/g,'<span class="hr">🔴</span>')
+    .replace(/🟠/g,'<span class="hw">🟠</span>')
+    .replace(/🟢/g,'<span class="hg">🟢</span>')
+    .replace(/🔵/g,'<span class="hi">🔵</span>')
+    .replace(/\n/g,'<br>');
+}
+
+// ─── FILE HANDLING ───
+function hf(e,type) {
+  Array.from(e.target.files).forEach(file=>{
+    const reader = new FileReader();
+    reader.onload = ev=>{
+      pending.push({type,file,src:ev.target.result,name:file.name});
+      renderPend();
+    };
+    reader.readAsDataURL(file);
+  });
+  e.target.value='';
+}
+
+function renderPend() {
+  const c=document.getElementById('pend'); c.innerHTML='';
+  pending.forEach((f,i)=>{
+    const ic=f.type==='photo'?'📷':f.type==='video'?'🎬':'🎙️';
+    const d=document.createElement('div'); d.className='pitem';
+    d.innerHTML=`${ic} ${f.name||f.type}<span class="px" onclick="rp(${i})">✕</span>`;
+    c.appendChild(d);
+  });
+}
+function rp(i){pending.splice(i,1);renderPend();}
+
+// ─── VOICE ───
+async function toggleVoice() {
+  const btn=document.getElementById('vbtn');
+  if(!recording){
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+      mediaRec=new MediaRecorder(stream);
+      let chunks=[];
+      mediaRec.ondataavailable=e=>chunks.push(e.data);
+      mediaRec.onstop=()=>{
+        stream.getTracks().forEach(t=>t.stop());
+        const dur=Math.round((Date.now()-recStart)/1000);
+        const label=`Voice note (${Math.floor(dur/60)}:${(dur%60).toString().padStart(2,'0')})`;
+        pending.push({type:'voice',label,name:label});
+        renderPend();
+        const ti=document.getElementById('ti');
+        if(!ti.value) ti.value='[Voice note attached — please analyze]';
+      };
+      mediaRec.start(); recording=true; recStart=Date.now();
+      btn.classList.add('rec'); btn.innerHTML='🔴 Stop Recording';
+    } catch(e){
+      // demo fallback
+      simulateVoice();
+    }
+  } else {
+    if(mediaRec) mediaRec.stop();
+    recording=false; btn.classList.remove('rec'); btn.innerHTML='🎙️ Voice Note';
+  }
+}
+
+function simulateVoice(){
+  const demos = {
+    EN: {label:'Voice note EN (0:11)', text:'Chiller number 2 making grinding noise on startup, it trips on high pressure after about 10 minutes, outdoor temperature is 44 degrees Celsius, Carrier 30XA unit'},
+    HI: {label:'Voice note हिं (0:09)', text:'[Hindi voice transcribed]: "Chiller mein kharabi hai, start hone par awaaz aa rahi hai, 10 minute mein trip ho jata hai, bahaar ka temperature 44 degree hai"'},
+    ML: {label:'Voice note ML (0:10)', text:'[Malayalam voice transcribed]: "Chiller-ல் startup-ൽ grinding noise വരുന്നു, 10 minit കഴിഞ്ഞ് high pressure trip ആകുന്നു"'},
+    AR: {label:'Voice note AR (0:08)', text:'[Arabic voice transcribed]: "المبرد يصدر صوتاً عند التشغيل ويتوقف بعد 10 دقائق بسبب ارتفاع ضغط المكثف"'},
+  };
+  const d = demos[lang]||demos.EN;
+  pending.push({type:'voice',label:d.label,name:d.label});
+  renderPend();
+  document.getElementById('ti').value = d.text;
+  addAI(`🎙️ **Voice note captured** *(demo — mic not available)*\n\n**Transcribed:** *"${d.text}"*\n\nAnalyzing now...`);
+  setTimeout(()=>send(),1200);
+}
+
+// ─── TEXT TO SPEECH ───
+function toggleSpeak(){
+  speakEnabled=!speakEnabled;
+  const b=document.getElementById('spkbtn');
+  b.classList.toggle('speaking',speakEnabled);
+  b.innerHTML = speakEnabled ? '🔊 Speaking ON' : '🔊 Speak Answer';
+}
+
+// ─── SEND ───
+async function send() {
+  if(busy) return;
+  const ti=document.getElementById('ti');
+  const text=ti.value.trim();
+  const files=[...pending];
+  if(!text&&!files.length) return;
+  ti.value=''; ti.style.height='auto';
+  pending=[]; renderPend();
+  addUser(text,files);
+  busy=true; showThinking('Analyzing fault...');
+  try{
+    let imgData=null;
+    const ph=files.find(f=>f.type==='photo'&&f.file);
+    if(ph) imgData=await toB64(ph.file);
+    let prompt=text||'Analyze this image — identify equipment, assess condition, diagnose any visible faults.';
+    if(files.some(f=>f.type==='voice')&&!text) prompt='[Voice note attached] Describe the fault diagnosis based on a technician reporting a chiller fault.';
+    if(lang!=='EN') prompt=`[User language: ${lang}] ${prompt}`;
+    const resp=await callAI(prompt,imgData);
+    hideThinking(); addAI(resp);
+  }catch(e){
+    hideThinking();
+    addAI('⚠️ **Connection issue.** Check your network and try again. If the problem persists, contact your supervisor.');
+  }
+  busy=false;
+}
+
+async function callAI(msg,img=null){
+  const content=[];
+  if(img) content.push({type:'image',source:{type:'base64',media_type:img.mt,data:img.data}});
+  content.push({type:'text',text:msg});
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json', 'x-api-key': CONFIG.API_KEY, 'anthropic-version':'2023-06-01'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-20250514',
+      max_tokens:1000,
+      system:SYS,
+      messages:[{role:'user',content}]
+    })
+  });
+  const d=await r.json();
+  return d.content?.[0]?.text||'Unable to process. Please try again.';
+}
+
+function toB64(file){
+  return new Promise((res,rej)=>{
+    const r=new FileReader();
+    r.onload=()=>res({data:r.result.split(',')[1],mt:file.type});
+    r.onerror=rej;
+    r.readAsDataURL(file);
+  });
+}
+
+function sq(text){hideWelcome();document.getElementById('ti').value=text;send();}
+
+// ─── MODAL ───
+function openM(src){document.getElementById('mimg').src=src;document.getElementById('modal').classList.add('open');}
+function closeM(){document.getElementById('modal').classList.remove('open');}
+
+// ─── DEMOS ───
+function demoScreen(){
+  hideWelcome();
+  const svgB64 = btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="280" height="180">
+    <rect width="280" height="180" fill="#060e1a"/>
+    <rect x="15" y="12" width="250" height="156" rx="10" fill="#0a1828" stroke="#1a3a5a" stroke-width="1.5"/>
+    <text x="140" y="35" font-family="monospace" font-size="11" fill="#3a8aff" text-anchor="middle" font-weight="bold">CARRIER 30XA TOUCH PILOT</text>
+    <text x="140" y="50" font-family="monospace" font-size="8" fill="#3a6080" text-anchor="middle">SN: 2519X45621 | R134a</text>
+    <rect x="25" y="57" width="230" height="36" rx="5" fill="#220808" stroke="#ff2200" stroke-width="1"/>
+    <text x="140" y="74" font-family="monospace" font-size="13" fill="#ff3300" text-anchor="middle" font-weight="bold">⚠  ALM-23 ACTIVE</text>
+    <text x="140" y="88" font-family="monospace" font-size="9" fill="#cc4400" text-anchor="middle">HIGH CONDENSER PRESSURE TRIP</text>
+    <rect x="25" y="98" width="108" height="30" rx="4" fill="#0d1f30" stroke="#1a3a50"/>
+    <text x="79" y="111" font-family="monospace" font-size="8" fill="#4a8aaa" text-anchor="middle">COND PRESS</text>
+    <text x="79" y="124" font-family="monospace" font-size="11" fill="#ff6644" text-anchor="middle" font-weight="bold">19.2 BAR ▲</text>
+    <rect x="147" y="98" width="108" height="30" rx="4" fill="#0d1f30" stroke="#1a3a50"/>
+    <text x="201" y="111" font-family="monospace" font-size="8" fill="#4a8aaa" text-anchor="middle">OUTDOOR TEMP</text>
+    <text x="201" y="124" font-family="monospace" font-size="11" fill="#ffaa44" text-anchor="middle" font-weight="bold">44.8°C</text>
+    <rect x="25" y="133" width="69" height="24" rx="3" fill="#0d1f30" stroke="#1a3a50"/>
+    <text x="59" y="142" font-family="monospace" font-size="7" fill="#3a6080" text-anchor="middle">EVAP TEMP</text>
+    <text x="59" y="153" font-family="monospace" font-size="9" fill="#44ccaa" text-anchor="middle">6.4°C ✓</text>
+    <rect x="100" y="133" width="69" height="24" rx="3" fill="#0d1f30" stroke="#1a3a50"/>
+    <text x="134" y="142" font-family="monospace" font-size="7" fill="#3a6080" text-anchor="middle">CW SUPPLY</text>
+    <text x="134" y="153" font-family="monospace" font-size="9" fill="#ffaa44" text-anchor="middle">30.4°C ▲</text>
+    <rect x="175" y="133" width="80" height="24" rx="3" fill="#220808" stroke="#661100"/>
+    <text x="215" y="142" font-family="monospace" font-size="7" fill="#884444" text-anchor="middle">COMP STATUS</text>
+    <text x="215" y="153" font-family="monospace" font-size="9" fill="#ff4422" text-anchor="middle">TRIPPED</text>
+  </svg>`);
+  const src = 'data:image/svg+xml;base64,'+svgB64;
+  addUser('', [{type:'photo',src,name:'chiller_display_ALM23.jpg',file:null}]);
+  busy=true; showThinking('Reading display screen...');
+  setTimeout(()=>{
+    hideThinking();
+    addRich(`
+<div style="font-size:13px">
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;color:var(--amber);margin-bottom:12px">🖥️ DISPLAY SCREEN ANALYSIS COMPLETE</div>
+  <div class="safety-bar">⚠️ <div><b>SAFETY FIRST:</b> Do not bypass high pressure switch. Keep clear of PRV discharge. Verify system pressure before opening any refrigerant circuit joints. Lockout-Tagout if compressor inspection needed.</div></div>
+  <div class="card">
+    <div class="card-hdr">
+      <span style="font-size:22px">🔴</span>
+      <div class="card-title">ALM-23 — HIGH CONDENSER PRESSURE</div>
+      <div class="sev-tag st-crit">CRITICAL</div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-l">EQUIPMENT</div><div class="stat-v" style="font-size:12px">Carrier 30XA Touch Pilot</div></div>
+      <div class="stat-box" style="background:rgba(255,60,90,0.08)"><div class="stat-l">COND PRESSURE</div><div class="stat-v hr">19.2 bar ▲ HIGH</div></div>
+      <div class="stat-box" style="background:rgba(245,166,35,0.06)"><div class="stat-l">OUTDOOR TEMP</div><div class="stat-v hw">44.8°C</div></div>
+      <div class="stat-box" style="background:rgba(255,60,90,0.06)"><div class="stat-l">COMPRESSOR</div><div class="stat-v hr">TRIPPED</div></div>
+    </div>
+    <div style="font-size:10px;color:var(--t2);font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;margin:10px 0 6px">PROBABLE CAUSES — RANKED BY LIKELIHOOD</div>
+    <div class="causes">
+      <div class="cause">🔴 Fouled condenser coil — fin blockage from dust/sand (UAE summer)<div class="cpill ph">85%</div></div>
+      <div class="cause">🟠 Condenser water temp high — cooling tower performance degraded<div class="cpill pm">68%</div></div>
+      <div class="cause">🟠 Reduced condenser water flow — pump cavitation or valve issue<div class="cpill pm">52%</div></div>
+      <div class="cause">🔵 Refrigerant overcharge — possible after recent top-up<div class="cpill pl">28%</div></div>
+      <div class="cause">🔵 Non-condensables in refrigerant circuit<div class="cpill pl">18%</div></div>
+    </div>
+  </div>
+  <div style="font-size:10px;color:var(--t2);font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;margin:12px 0 7px">STEP-BY-STEP RECTIFICATION</div>
+  <div class="steps">
+    <div class="step"><div class="stepn">1</div><div><b>Check condenser water flow</b> — verify flow rate at flow meter against design spec. If no flow meter, check pump amps vs. nameplate.</div></div>
+    <div class="step"><div class="stepn">2</div><div><b>Measure ΔT across condenser</b> — entering vs. leaving CW temp. Should be 4–6°C. If ΔT &gt; 8°C = fouled tubes or low flow.</div></div>
+    <div class="step"><div class="stepn">3</div><div><b>Inspect cooling tower</b> — check fill media condition, spray nozzles, fan rpm, basin water level, and approach temperature.</div></div>
+    <div class="step"><div class="stepn">4</div><div><b>Visually inspect condenser coil face</b> — if blocked &gt;30%, schedule chemical coil cleaning. Use fin comb for localized damage.</div></div>
+    <div class="step"><div class="stepn">5</div><div><b>If flow and coil OK</b> — measure subcooling at condenser outlet (R134a: should be 4–8°C). High subcooling → overcharge.</div></div>
+    <div class="step"><div class="stepn">6</div><div><b>Reset alarm only after root cause identified and corrected.</b> Do not force restart without investigation.</div></div>
+  </div>
+  <div class="se-box">
+    <div class="se-hdr">👷 SR. ENGINEER INSIGHT</div>
+    <div class="se-item"><b>Pattern alert:</b> CW supply at 30.4°C on a 44.8°C day is marginal — your cooling tower approach temperature is deteriorating. This is likely a seasonal drift that's been building since April. Schedule a full cooling tower chemical clean and performance test.</div>
+    <div class="se-item"><b>Don't miss:</b> Check the condenser tube bundle for biofouling/scaling — UAE hard water causes rapid scaling. Last chemical descale date? If &gt;6 months, this is your root cause.</div>
+    <div class="se-item"><b>Tip:</b> After repair, lower chiller condenser water setpoint by 1°C for 48hrs and monitor — you'll see if the performance recovers fully.</div>
+  </div>
+  <div class="wo-box">
+    <div class="wo-hdr">✅ WORK ORDER AUTO-GENERATED</div>
+    <div class="wo-r"><span>WO Number</span><span>WO-2026-1124</span></div>
+    <div class="wo-r"><span>Asset</span><span>Carrier 30XA — SN 2519X45621</span></div>
+    <div class="wo-r"><span>Priority</span><span class="hr">CRITICAL</span></div>
+    <div class="wo-r"><span>Est. Repair Time</span><span>3–5 hours</span></div>
+    <div class="wo-r"><span>Sent To</span><span class="hg">Supervisor + Client ✓</span></div>
+  </div>
+  <div class="act-row">
+    <button class="act-btn act-primary" onclick="sq('Give me detailed condenser coil chemical cleaning procedure for Carrier 30XA')">🧪 Coil Cleaning Procedure</button>
+    <button class="act-btn act-sec" onclick="sq('Cooling tower inspection checklist and performance test procedure UAE summer')">🌀 CT Inspection Guide</button>
+    <button class="act-btn act-sec" onclick="demoReport()">📋 Generate Full Report</button>
+  </div>
+</div>`);
+    busy=false;
+  },2400);
+}
+
+function demoReport(){
+  hideWelcome();
+  addUser('Generate condition assessment report. Asset: AHU-07, Trane CSAA-125, Serial: TRN-2019-04471. Site: Emirates Tower L4. Attaching 4 inspection photos.', [
+    {type:'photo',src:'data:image/svg+xml;base64,'+btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="140" height="100" style="background:#0d1a28"><rect x="8" y="8" width="124" height="84" rx="6" fill="#0a1520" stroke="#1a3a50"/><text x="70" y="35" font-family="monospace" font-size="8" fill="#3a7a9a" text-anchor="middle">EVAP COIL FACE</text><text x="70" y="52" font-family="monospace" font-size="7" fill="#6a6a2a" text-anchor="middle">■■■■■■■■■■■■</text><text x="70" y="64" font-family="monospace" font-size="7" fill="#8a8030" text-anchor="middle">FOULED ~45%</text><text x="70" y="80" font-family="monospace" font-size="6" fill="#3a5060" text-anchor="middle">Photo 1</text></svg>`),name:'coil.jpg'},
+    {type:'photo',src:'data:image/svg+xml;base64,'+btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="140" height="100" style="background:#1a0d0d"><rect x="8" y="8" width="124" height="84" rx="6" fill="#200a0a" stroke="#5a1a1a"/><text x="70" y="35" font-family="monospace" font-size="8" fill="#aa4444" text-anchor="middle">DRIVE BELT</text><text x="70" y="55" font-family="monospace" font-size="7" fill="#884444" text-anchor="middle">GLAZED + WORN</text><text x="70" y="80" font-family="monospace" font-size="6" fill="#3a2020" text-anchor="middle">Photo 2</text></svg>`),name:'belt.jpg'}
+  ]);
+  busy=true; showThinking('Generating condition report...');
+  setTimeout(()=>{
+    hideThinking();
+    addRich(`
+<div style="font-size:13px">
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;color:var(--amber);margin-bottom:12px">📋 CONDITION ASSESSMENT REPORT GENERATED</div>
+  <div class="report-mono">
+<span class="rs">══════════════════════════════════════════
+  EQUIPMENT CONDITION ASSESSMENT REPORT
+══════════════════════════════════════════</span>
+
+<span class="rl">Site:          </span><span class="rv">Emirates Tower — Level 4 AHU Room</span>
+<span class="rl">Asset ID:      </span><span class="rv">AHU-07</span>
+<span class="rl">Equipment:     </span><span class="rv">Trane CSAA-125 Air Handling Unit</span>
+<span class="rl">Serial No:     </span><span class="rv">TRN-2019-04471</span>
+<span class="rl">Mfr Year:      </span><span class="rv">2019 (7 years old)</span>
+<span class="rl">Inspection:    </span><span class="rv">12-Mar-2026  |  14:35</span>
+<span class="rl">Inspector:     </span><span class="rv">Tech (via FieldSense AI)</span>
+<span class="rd">──────────────────────────────────────────</span>
+<span class="rs">EXECUTIVE SUMMARY</span>
+<span class="rd">──────────────────────────────────────────</span>
+<span class="rl">Overall Condition:    </span><span class="rw">FAIR ⚠️  (Score: 58/100)</span>
+<span class="rl">Immediate Action:     </span><span class="rb">YES — Required within 5 days</span>
+<span class="rl">Est. Remaining Life:  </span><span class="rv">6–8 years</span>
+<span class="rl">Replacement Needed:   </span><span class="ro">No — Fully serviceable</span>
+<span class="rd">──────────────────────────────────────────</span>
+<span class="rs">PHOTO-BY-PHOTO FINDINGS</span>
+<span class="rd">──────────────────────────────────────────</span>
+<span class="rl">📷 Photo 1 — Evaporator Coil Face (coil.jpg)</span>
+  <span class="rv">Finding:   Fin fouling estimated 40–50%</span>
+  <span class="rv">Root:      Dust accumulation, no recent clean</span>
+  <span class="rb">Severity:  HIGH</span>
+  <span class="rv">Impact:    +14% energy consumption on AHU</span>
+  <span class="rv">Action:    Chemical coil clean — priority 1</span>
+
+<span class="rl">📷 Photo 2 — Fan Belt Drive (belt.jpg)</span>
+  <span class="rv">Finding:   Belt glazed, sidewall cracking visible</span>
+  <span class="rv">Root:      Age + misalignment over time</span>
+  <span class="rw">Severity:  MEDIUM</span>
+  <span class="rv">Action:    Replace belt — Trane P/N X13111118-010</span>
+  <span class="rv">Risk:      Belt snap = full AHU shutdown</span>
+<span class="rd">──────────────────────────────────────────</span>
+<span class="rs">PERFORMANCE DATA</span>
+<span class="rd">──────────────────────────────────────────</span>
+<span class="rl">Supply Air Temp:   </span><span class="rw">19.2°C  (design: 16°C) ⚠️</span>
+<span class="rl">Static Pressure:   </span><span class="rw">220 Pa  (design: 180 Pa) ⚠️</span>
+<span class="rl">Motor Current:     </span><span class="rv">18.4A   (nameplate: 22A) ✓</span>
+<span class="rl">Operating Hours:   </span><span class="rv">~29,400 hrs since 2019</span>
+<span class="rd">──────────────────────────────────────────</span>
+<span class="rs">PRIORITIZED ACTION PLAN</span>
+<span class="rd">──────────────────────────────────────────</span>
+<span class="rb">P1 — THIS WEEK (Days 1-5):</span>
+  <span class="rv">→ Evap + condenser coil chemical cleaning</span>
+  <span class="rv">→ Est. cost: AED 1,800 – 2,800</span>
+  <span class="rv">→ Expected: Supply air temp → 16°C ✓</span>
+
+<span class="rw">P2 — THIS MONTH:</span>
+  <span class="rv">→ Fan belt replacement + tension/alignment</span>
+  <span class="rv">→ Belt + labour: AED 350 – 550</span>
+
+<span class="ro">P3 — NEXT PPM CYCLE:</span>
+  <span class="rv">→ Filter replacement (G4 + F7)</span>
+  <span class="rv">→ Bearing re-greasing (fan + motor)</span>
+  <span class="rv">→ Drain pan cleaning + algaecide treatment</span>
+  <span class="rv">→ Est. cost: AED 400 – 700</span>
+<span class="rd">──────────────────────────────────────────</span>
+<span class="rs">COST OF INACTION (if delayed 8 weeks)</span>
+<span class="rd">──────────────────────────────────────────</span>
+  <span class="rb">Extra energy waste:    AED 6,000 – 9,500</span>
+  <span class="rb">Belt snap risk:        AHU shutdown, tenant complaints</span>
+  <span class="rb">Coil corrosion risk:   AED 15,000 – 35,000 replacement</span>
+<span class="rd">──────────────────────────────────────────</span>
+<span class="ro">✅ 3 Work Orders created: WO-2026-1125/6/7</span>
+<span class="ro">✅ Report sent to FM Manager + Client</span>
+<span class="ro">✅ Asset record updated in CMMS</span>
+  </div>
+  <div class="act-row">
+    <button class="act-btn act-primary" onclick="addAI('📄 PDF report downloaded: AHU07_Condition_Report_12Mar2026.pdf — 8 pages, photos embedded, ready for client signature.')">📄 Download PDF</button>
+    <button class="act-btn act-sec" onclick="addAI('📧 Report emailed to FM Manager and Client at '+now()+'. CC: Maintenance Supervisor.')">📧 Email to Client</button>
+    <button class="act-btn act-sec" onclick="addAI('🔗 Work orders WO-1125, WO-1126, WO-1127 synced to CMMS. Assigned to maintenance team. Parts ordered from store.')">🔗 Sync to CMMS</button>
+    <button class="act-btn act-sec" onclick="sq('Give me the chemical coil cleaning procedure for Trane CSAA AHU step by step')">🧪 Cleaning SOP</button>
+  </div>
+</div>`);
+    busy=false;
+  },2600);
+}
+
+function demoVoice(){
+  hideWelcome();
+  addUser('',[{type:'voice',label:'Voice note Malayalam (0:11)',name:'voice_ml.mp3'}]);
+  busy=true; showThinking('Transcribing voice note...');
+  setTimeout(()=>{
+    hideThinking();
+    addRich(`
+<div style="font-size:13px">
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1.5px;color:var(--teal);margin-bottom:10px">🎙️ VOICE NOTE — TRANSCRIBED & ANALYZED</div>
+  <div style="background:rgba(0,229,204,0.05);border:1px solid rgba(0,229,204,0.15);border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px">
+    <div style="color:var(--t2);font-size:10px;font-family:'JetBrains Mono',monospace;margin-bottom:4px">ORIGINAL (MALAYALAM):</div>
+    <div style="color:var(--text)">FCU നൊ. 405-ൽ cooling ഇല്ല, filter clean ആണ്, thermostat ശരിയാണ്, chilled water pipe cold ആണ്, but room temp 27°C ഉണ്ട്</div>
+    <div style="color:var(--t2);font-size:10px;font-family:'JetBrains Mono',monospace;margin:8px 0 4px">TRANSLATED (ENGLISH):</div>
+    <div style="color:var(--amber2)">"FCU No. 405 is not cooling. Filter is clean, thermostat is correct, chilled water pipe feels cold, but room temperature is 27°C"</div>
+  </div>
+  <div class="card">
+    <div class="card-hdr">
+      <span style="font-size:20px">🟠</span>
+      <div class="card-title">FCU NOT COOLING — VALVE SUSPECTED</div>
+      <div class="sev-tag st-urg">URGENT</div>
+    </div>
+    <div style="font-size:11px;color:var(--t2);background:rgba(0,229,204,0.05);border-radius:7px;padding:8px;margin-bottom:10px;border:1px solid rgba(0,229,204,0.1)">
+      🔑 <b>Key clue from voice note:</b> "CHW pipe feels cold but room is warm" — this tells us chilled water IS reaching the FCU but is NOT passing through the coil. Classic stuck-closed control valve signature.
+    </div>
+    <div class="causes">
+      <div class="cause">🔴 CHW control valve stuck closed — actuator failure or lost signal<div class="cpill ph">82%</div></div>
+      <div class="cause">🟠 Valve actuator gear stripped (Belimo/Siemens)<div class="cpill pm">60%</div></div>
+      <div class="cause">🔵 BMS signal loss to valve — wiring or DDC fault<div class="cpill pl">35%</div></div>
+      <div class="cause">🔵 Air lock in coil — especially if recently serviced<div class="cpill pl">20%</div></div>
+    </div>
+    <div style="font-size:10px;color:var(--t2);font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;margin:10px 0 7px">STEP-BY-STEP DEBUG</div>
+    <div class="steps">
+      <div class="step"><div class="stepn">1</div><div>Feel <b>both CHW pipes</b> at FCU — if supply is cold but return is NOT cold → valve is not opening (confirms diagnosis)</div></div>
+      <div class="step"><div class="stepn">2</div><div>Check <b>valve actuator LED/indicator</b> — Belimo LR24A shows position via indicator mark. Should show open when cooling demand is active.</div></div>
+      <div class="step"><div class="stepn">3</div><div><b>Manual override test</b> — use actuator manual override button. If cooling restores → actuator faulty. If not → valve body seized or airlock.</div></div>
+      <div class="step"><div class="stepn">4</div><div>Check <b>BMS DDC output</b> — measure DC voltage at actuator terminals (Belimo LR24A = 0–10V DC or 2–10V). No signal = BMS issue.</div></div>
+      <div class="step"><div class="stepn">5</div><div>If actuator confirmed faulty → <b>replace Belimo LR24A</b> (or equivalent). Part cost: AED 280–380. Time: 30 min.</div></div>
+    </div>
+    <div class="se-box">
+      <div class="se-hdr">👷 SR. ENGINEER INSIGHT</div>
+      <div class="se-item"><b>Pattern tip:</b> If this is a Belimo LR24A actuator &gt;5 years old in a UAE building, check your entire floor's FCU actuators now — they typically fail in clusters due to same installation batch and thermal cycling. Proactive replacement of aging actuators saves repeated call-backs.</div>
+    </div>
+  </div>
+  <div class="act-row">
+    <button class="act-btn act-primary" onclick="sq('Belimo LR24A actuator replacement procedure and commissioning steps')">🔧 Actuator Replace SOP</button>
+    <button class="act-btn act-sec" onclick="sq('How to check BMS DDC output signal for FCU valve in Siemens Desigo system')">🖥️ BMS Check Guide</button>
+  </div>
+</div>`);
+    busy=false;
+  },2000);
+}
+
+function demoSenior(){
+  hideWelcome();
+  sq('Acting as a senior engineer: Our central chiller plant has been showing 8–12% higher energy consumption this month vs same period last year. Outdoor conditions are similar. What is your systematic approach to diagnose this degradation? We have 3x Carrier 30XA chillers, 2 cooling towers, and 4 condenser water pumps.');
+}
+
+function demoDebug(){
+  hideWelcome();
+  addUser('AHU fan motor tripped on overcurrent. Reset and it runs for 5 minutes then trips again. 15kW motor, ABB VFD. What is the systematic debug approach?');
+  busy=true; showThinking('Building debug methodology...');
+  setTimeout(()=>{
+    hideThinking();
+    addRich(`
+<div style="font-size:13px">
+  <div style="font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1.5px;color:var(--teal);margin-bottom:10px">🔍 SYSTEMATIC DEBUG — AHU MOTOR OVERCURRENT</div>
+  <div class="safety-bar">⚠️ <b>SAFETY:</b> Do not repeatedly reset without investigation — risk of motor winding burnout. Isolate VFD supply before any wiring checks. Use CAT III multimeter minimum.</div>
+  <div style="background:rgba(0,229,204,0.05);border:1px solid rgba(0,229,204,0.1);border-radius:8px;padding:10px;margin-bottom:12px;font-size:12px">
+    🔑 <b>Key symptom:</b> Runs 5 min then trips → thermal or load-related. NOT an instantaneous fault (winding short/earth fault would trip immediately). Narrows to: mechanical overload, VFD parameter, or cooling issue.
+  </div>
+  <div class="sev-tag st-urg" style="display:inline-block;margin-bottom:10px">🟠 URGENT</div>
+  <div style="font-size:11px;color:var(--t2);font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;margin-bottom:8px">RANKED PROBABLE CAUSES</div>
+  <div class="causes">
+    <div class="cause">🔴 Fan mechanical overload — belt tension too high, bearing seized, wheel imbalance<div class="cpill ph">75%</div></div>
+    <div class="cause">🟠 ABB VFD current limit set too low — parameter mismatch after recent change<div class="cpill pm">60%</div></div>
+    <div class="cause">🟠 Motor winding partially damaged — insulation breakdown starting<div class="cpill pm">45%</div></div>
+    <div class="cause">🔵 VFD cooling fan failed — VFD itself overheating and limiting current<div class="cpill pl">30%</div></div>
+    <div class="cause">🔵 Duct static pressure high — damper stuck, filter choked<div class="cpill pl">25%</div></div>
+  </div>
+  <div style="font-size:11px;color:var(--t2);font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;margin:12px 0 8px">SYSTEMATIC DEBUG SEQUENCE — DO IN ORDER</div>
+  <div class="debug-steps">
+    <div class="dbg"><div class="dbg-ic">⚡</div><div><div class="dbg-t"><b>Step 1 — Read ABB VFD fault log first</b></div><div class="dbg-sub">Menu → Fault History → Note fault code. F0001=overcurrent, F0005=overtemp. This tells you IF it's electrical or thermal. Also check VFD output current at time of trip (logged).</div></div></div>
+    <div class="dbg"><div class="dbg-ic">📏</div><div><div class="dbg-t"><b>Step 2 — Measure motor current under load</b></div><div class="dbg-sub">Use clamp meter on VFD output cables. 15kW 415V motor FLA = ~25A. If reading &gt;27A before trip = genuine overload. If &lt;25A = VFD parameter too tight.</div></div></div>
+    <div class="dbg"><div class="dbg-ic">🔄</div><div><div class="dbg-t"><b>Step 3 — Check VFD parameters</b></div><div class="dbg-sub">ABB ACS550/880: P99.06 = motor current limit (set to 100–110% of motor FLA). P30.17 = current trip delay. Verify against motor nameplate — may have been incorrectly programmed.</div></div></div>
+    <div class="dbg"><div class="dbg-ic">🔧</div><div><div class="dbg-t"><b>Step 4 — Check mechanical side (most likely!)</b></div><div class="dbg-sub">Isolate and manually rotate fan wheel by hand — should spin freely with no drag. Check belt tension with tension gauge (deflection = 10–15mm per 100mm span). Check bearings for heat after 5min run.</div></div></div>
+    <div class="dbg"><div class="dbg-ic">🌡️</div><div><div class="dbg-t"><b>Step 5 — Motor insulation resistance test</b></div><div class="dbg-sub">Use 500V megger between each phase and earth. Reading should be &gt;10 MΩ. 1–10 MΩ = warning. &lt;1 MΩ = replace motor. Test all 3 phases L1-E, L2-E, L3-E.</div></div></div>
+    <div class="dbg"><div class="dbg-ic">❄️</div><div><div class="dbg-t"><b>Step 6 — Check VFD cooling</b></div><div class="dbg-sub">Verify VFD internal cooling fan is running. Check VFD heatsink temp (should be &lt;60°C). Clean VFD air filter if present. Ambient temp in panel &lt;40°C?</div></div></div>
+    <div class="dbg"><div class="dbg-ic">🌬️</div><div><div class="dbg-t"><b>Step 7 — Check static pressure / airside</b></div><div class="dbg-sub">Measure duct static pressure with magnehelic or digital manometer. Compare to design. High static = choked filters or closed damper = fan working harder = overcurrent.</div></div></div>
+  </div>
+  <div class="se-box">
+    <div class="se-hdr">👷 SR. ENGINEER VERDICT</div>
+    <div class="se-item"><b>Most likely path:</b> Step 3 + 4 together. In UAE, belt tension shifts seasonally due to thermal expansion. A belt that was correct in winter is overtight in summer. Combined with a slightly conservative VFD current limit = trips after warmup. Check these two first before touching anything else.</div>
+    <div class="se-item"><b>Tools needed:</b> Clamp meter (Fluke 376), belt tension gauge, 500V megger (Fluke 1507), laptop with ABB Drive Composer software.</div>
+    <div class="se-item"><b>Estimated diagnosis time:</b> 45–90 minutes if systematic. Most techs waste 3–4 hours guessing.</div>
+  </div>
+  <div class="act-row">
+    <button class="act-btn act-primary" onclick="sq('ABB VFD ACS550 fault codes F0001 overcurrent complete troubleshooting guide')">⚡ ABB VFD Fault Guide</button>
+    <button class="act-btn act-sec" onclick="sq('How to perform motor insulation resistance megger test procedure')">🔌 Megger Test SOP</button>
+    <button class="act-btn act-sec" onclick="sq('Fan belt tension check and adjustment procedure AHU')">🔧 Belt Tension Guide</button>
+  </div>
+</div>`);
+    busy=false;
+  },2200);
+}
+
+function demoMulti(){
+  hideWelcome();
+  sq('Chiller showing 3 simultaneous alarms: High Condenser Pressure + Low Evaporator Flow + High Motor Temperature. All appeared within 5 minutes of each other. What is the root cause analysis?');
+}
+</script>
+</body>
+</html>
